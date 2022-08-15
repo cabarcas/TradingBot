@@ -1,0 +1,297 @@
+2022-08-07 21:40:39,644 INFO :: Binance Futures Client successfully initialized
+2022-08-07 21:40:40,885 INFO :: Binance connection opened
+2022-08-07 21:40:42,125 INFO :: Bitmex Client successfully initialized
+2022-08-07 21:40:43,127 INFO :: Bitmex connection opened
+2022-08-07 21:56:31,016 INFO :: Binance Futures Client successfully initialized
+2022-08-07 21:56:32,259 INFO :: Binance connection opened
+2022-08-07 21:56:33,272 INFO :: Bitmex Client successfully initialized
+2022-08-07 21:56:34,204 INFO :: Bitmex connection opened
+2022-08-07 21:59:36,778 INFO :: Binance Futures Client successfully initialized
+2022-08-07 21:59:38,022 INFO :: Binance connection opened
+2022-08-07 21:59:38,225 INFO :: Bitmex Client successfully initialized
+2022-08-07 21:59:39,225 INFO :: Bitmex connection opened
+2022-08-07 22:00:37,374 INFO :: Binance Futures Client successfully initialized
+2022-08-07 22:00:38,171 INFO :: Bitmex Client successfully initialized
+2022-08-07 22:00:38,581 INFO :: Binance connection opened
+2022-08-07 22:00:39,116 INFO :: Bitmex connection opened
+2022-08-07 22:03:25,319 INFO :: Binance Futures Client successfully initialized
+2022-08-07 22:03:26,286 INFO :: Bitmex Client successfully initialized
+2022-08-07 22:03:26,576 INFO :: Binance connection opened
+2022-08-07 22:03:27,293 INFO :: Bitmex connection opened
+2022-08-07 22:04:01,003 INFO :: Binance Futures Client successfully initialized
+2022-08-07 22:04:02,170 INFO :: Binance connection opened
+2022-08-07 22:04:03,137 INFO :: Bitmex Client successfully initialized
+2022-08-07 22:04:04,154 INFO :: Bitmex connection opened
+2022-08-07 22:12:28,113 INFO :: Binance Futures Client successfully initialized
+2022-08-07 22:12:28,969 INFO :: Bitmex Client successfully initialized
+2022-08-07 22:12:29,326 INFO :: Binance connection opened
+2022-08-07 22:12:29,916 INFO :: Bitmex connection opened
+2022-08-07 23:41:25,561 INFO :: Binance Futures Client successfully initialized
+2022-08-07 23:41:26,584 INFO :: Bitmex Client successfully initialized
+2022-08-07 23:41:26,805 INFO :: Binance connection opened
+2022-08-07 23:41:27,595 INFO :: Bitmex connection opened
+2022-08-07 23:43:30,124 INFO :: Binance Futures Client successfully initialized
+2022-08-07 23:43:30,840 INFO :: Bitmex Client successfully initialized
+2022-08-07 23:43:31,376 INFO :: Binance connection opened
+2022-08-07 23:43:31,817 INFO :: Bitmex connection opened
+2022-08-07 23:44:48,394 INFO :: Binance Futures Client successfully initialized
+2022-08-07 23:44:49,069 INFO :: Bitmex Client successfully initialized
+2022-08-07 23:44:49,543 INFO :: Binance connection opened
+2022-08-07 23:44:50,031 INFO :: Bitmex connection opened
+2022-08-07 23:46:49,860 INFO :: Binance Futures Client successfully initialized
+2022-08-07 23:46:51,111 INFO :: Binance connection opened
+2022-08-07 23:46:51,484 INFO :: Bitmex Client successfully initialized
+2022-08-07 23:46:52,478 INFO :: Bitmex connection opened
+2022-08-07 23:47:26,420 INFO :: Binance Futures Client successfully initialized
+2022-08-07 23:47:27,072 INFO :: Bitmex Client successfully initialized
+2022-08-07 23:47:27,645 INFO :: Binance connection opened
+2022-08-07 23:47:28,077 INFO :: Bitmex connection opened
+2022-08-07 23:52:04,233 INFO :: Binance Futures Client successfully initialized
+2022-08-07 23:52:04,984 INFO :: Bitmex Client successfully initialized
+2022-08-07 23:52:05,470 INFO :: Binance connection opened
+2022-08-07 23:52:05,960 INFO :: Bitmex connection opened
+2022-08-07 23:53:36,074 INFO :: Binance Futures Client successfully initialized
+2022-08-07 23:53:36,823 INFO :: Bitmex Client successfully initialized
+2022-08-07 23:53:37,311 INFO :: Binance connection opened
+2022-08-07 23:53:37,782 INFO :: Bitmex connection opened
+2022-08-07 23:58:18,530 INFO :: Binance Futures Client successfully initialized
+2022-08-07 23:58:19,238 INFO :: Bitmex Client successfully initialized
+2022-08-07 23:58:19,743 INFO :: Binance connection opened
+2022-08-07 23:58:20,294 INFO :: Bitmex connection opened
+2022-08-08 00:30:16,764 INFO :: Binance Futures Client successfully initialized
+2022-08-08 00:30:18,011 INFO :: Binance connection opened
+2022-08-08 00:30:18,246 INFO :: Bitmex Client successfully initialized
+2022-08-08 00:30:19,281 INFO :: Bitmex connection opened
+2022-08-08 00:54:26,709 INFO :: Binance Futures Client successfully initialized
+2022-08-08 00:54:27,846 INFO :: Bitmex Client successfully initialized
+2022-08-08 00:54:27,927 INFO :: Binance connection opened
+2022-08-08 00:54:28,826 INFO :: Bitmex connection opened
+2022-08-08 00:54:31,755 ERROR :: error from callback <bound method BitmexClient._on_message of <connectors.bitmex.BitmexClient object at 0x0000026CBD5BC898>>: unsupported operand type(s) for +: 'float' and 'str'
+2022-08-08 00:54:31,769 ERROR :: error from callback <bound method BitmexClient._on_message of <connectors.bitmex.BitmexClient object at 0x0000026CBD5BC898>>: unsupported operand type(s) for +: 'float' and 'str'
+2022-08-08 00:54:33,364 ERROR :: error from callback <bound method BitmexClient._on_message of <connectors.bitmex.BitmexClient object at 0x0000026CBD5BC898>>: unsupported operand type(s) for +: 'float' and 'str'
+2022-08-08 00:54:35,154 ERROR :: error from callback <bound method BitmexClient._on_message of <connectors.bitmex.BitmexClient object at 0x0000026CBD5BC898>>: unsupported operand type(s) for +: 'float' and 'str'
+2022-08-08 00:54:41,156 ERROR :: error from callback <bound method BitmexClient._on_message of <connectors.bitmex.BitmexClient object at 0x0000026CBD5BC898>>: unsupported operand type(s) for +: 'float' and 'str'
+2022-08-08 00:55:30,157 INFO :: Binance Futures Client successfully initialized
+2022-08-08 00:55:30,950 INFO :: Bitmex Client successfully initialized
+2022-08-08 00:55:31,385 INFO :: Binance connection opened
+2022-08-08 00:55:31,902 INFO :: Bitmex connection opened
+2022-08-08 00:55:34,310 INFO :: XBTUSD 23271 / 23331
+2022-08-08 00:55:34,311 INFO :: XBTUSD 23271 / 23331
+2022-08-08 00:55:34,313 INFO :: XBTUSD 23271 / 23331
+2022-08-08 00:55:35,153 INFO :: XBTUSD 23271 / 23331
+2022-08-08 00:55:38,859 INFO :: XBTUSD 23271 / 23331
+2022-08-08 00:55:41,154 INFO :: XBTUSD 23271 / 23331
+2022-08-08 00:55:43,880 INFO :: XBTUSD 23271 / 23331
+2022-08-08 00:55:45,654 INFO :: XBTUSD 23271 / 23331
+2022-08-08 00:55:48,857 INFO :: XBTUSD 23271 / 23331
+2022-08-08 00:55:50,178 INFO :: XBTUSD 23271 / 23331
+2022-08-08 00:55:53,854 INFO :: XBTUSD 23271 / 23331
+2022-08-08 00:55:56,153 INFO :: XBTUSD 23271 / 23331
+2022-08-08 00:55:58,856 INFO :: XBTUSD 23271 / 23331
+2022-08-08 00:56:00,656 INFO :: XBTUSD 23271 / 23331
+2022-08-08 00:56:03,903 INFO :: XBTUSD 23271 / 23331
+2022-08-08 00:56:06,660 INFO :: XBTUSD 23271 / 23331
+2022-08-08 00:56:56,459 INFO :: Binance Futures Client successfully initialized
+2022-08-08 00:56:57,330 INFO :: Bitmex Client successfully initialized
+2022-08-08 00:56:57,719 INFO :: Binance connection opened
+2022-08-08 00:56:58,333 INFO :: Bitmex connection opened
+2022-08-08 00:57:01,794 INFO :: XBTUSD 23328.5 / 23330.5
+2022-08-08 00:57:01,806 INFO :: XBTUSD 23328.5 / 23330.5
+2022-08-08 00:57:06,663 INFO :: XBTUSD 23328.5 / 23330.5
+2022-08-08 00:57:11,168 INFO :: XBTUSD 23328.5 / 23330.5
+2022-08-08 00:57:15,667 INFO :: XBTUSD 23328.5 / 23330.5
+2022-08-08 00:57:18,863 INFO :: XBTUSD 23318 / 23330.5
+2022-08-08 00:57:20,159 INFO :: XBTUSD 23318 / 23330.5
+2022-08-08 00:57:26,160 INFO :: XBTUSD 23318 / 23330.5
+2022-08-08 00:57:30,670 INFO :: XBTUSD 23318 / 23330.5
+2022-08-08 00:57:35,160 INFO :: XBTUSD 23318 / 23330.5
+2022-08-08 00:57:41,159 INFO :: XBTUSD 23318 / 23330.5
+2022-08-08 00:57:45,662 INFO :: XBTUSD 23318 / 23330.5
+2022-08-14 22:21:20,757 INFO :: Binance Futures Client successfully initialized
+2022-08-14 22:21:21,994 INFO :: Binance connection opened
+2022-08-14 22:21:26,373 INFO :: Bitmex Client successfully initialized
+2022-08-14 22:21:27,741 INFO :: Bitmex connection opened
+2022-08-14 22:21:31,828 INFO :: XBTUSD 24565 / 24565.5
+2022-08-14 22:21:31,843 INFO :: XBTUSD 24565 / 24565.5
+2022-08-14 22:21:31,843 INFO :: XBTUSD 24565 / 24565.5
+2022-08-14 22:21:33,899 INFO :: XBTUSD 24565 / 24565.5
+2022-08-14 22:21:35,699 INFO :: XBTUSD 24565 / 24565.5
+2022-08-14 22:21:41,696 INFO :: XBTUSD 24565 / 24565.5
+2022-08-14 22:21:46,192 INFO :: XBTUSD 24565 / 24565.5
+2022-08-14 22:21:50,691 INFO :: XBTUSD 24565 / 24565.5
+2022-08-15 12:21:42,084 INFO :: Binance Futures Client successfully initialized
+2022-08-15 12:21:43,034 INFO :: Bitmex Client successfully initialized
+2022-08-15 12:21:43,363 INFO :: Binance connection opened
+2022-08-15 12:21:44,313 INFO :: Bitmex connection opened
+2022-08-15 12:21:46,793 INFO :: XBTUSD 24110.5 / 24111
+2022-08-15 12:21:46,810 INFO :: XBTUSD 24110.5 / 24111
+2022-08-15 12:26:42,939 INFO :: Binance Futures Client successfully initialized
+2022-08-15 12:26:43,641 INFO :: Bitmex Client successfully initialized
+2022-08-15 12:26:44,154 INFO :: Binance connection opened
+2022-08-15 12:26:44,696 INFO :: Bitmex connection opened
+2022-08-15 12:26:46,866 INFO :: XBTUSD 24110.5 / 24111
+2022-08-15 12:26:46,878 INFO :: XBTUSD 24110.5 / 24111
+2022-08-15 12:26:46,885 INFO :: XBTUSD 24110.5 / 24111
+2022-08-15 12:26:48,901 INFO :: XBTUSD 24110.5 / 24111
+2022-08-15 12:26:48,922 INFO :: XBTUSD 24110.5 / 24111
+2022-08-15 12:26:50,716 INFO :: XBTUSD 24110.5 / 24111
+2022-08-15 12:26:53,922 INFO :: XBTUSD 24110.5 / 24111
+2022-08-15 12:26:55,219 INFO :: XBTUSD 24110.5 / 24111
+2022-08-15 12:27:01,221 INFO :: XBTUSD 24110.5 / 24111
+2022-08-15 12:27:03,419 INFO :: XBTUSD 24110.5 / 24111
+2022-08-15 12:27:03,922 INFO :: XBTUSD 24110.5 / 24111
+2022-08-15 12:27:05,721 INFO :: XBTUSD 24110.5 / 24111
+2022-08-15 12:27:10,220 INFO :: XBTUSD 24110.5 / 24111
+2022-08-15 12:27:13,926 INFO :: XBTUSD 24110.5 / 24111
+2022-08-15 12:27:16,218 INFO :: XBTUSD 24110.5 / 24111
+2022-08-15 12:27:18,962 INFO :: XBTUSD 24110.5 / 24111
+2022-08-15 12:27:20,720 INFO :: XBTUSD 24110.5 / 24111
+2022-08-15 12:27:25,219 INFO :: XBTUSD 24110.5 / 24111
+2022-08-15 12:27:30,289 INFO :: XBTUSD 24110.5 / 24111
+2022-08-15 12:27:31,221 INFO :: XBTUSD 24110.5 / 24111
+2022-08-15 12:27:35,719 INFO :: XBTUSD 24110.5 / 24111
+2022-08-15 12:27:40,223 INFO :: XBTUSD 24110.5 / 24111
+2022-08-15 12:31:10,395 INFO :: Binance Futures Client successfully initialized
+2022-08-15 12:31:11,199 INFO :: Bitmex Client successfully initialized
+2022-08-15 12:31:11,643 INFO :: Binance connection opened
+2022-08-15 12:31:12,197 INFO :: Bitmex connection opened
+2022-08-15 12:31:14,362 INFO :: XBTUSD 24110.5 / 24111
+2022-08-15 12:31:16,209 INFO :: XBTUSD 24110.5 / 24111
+2022-08-15 12:33:48,096 INFO :: Binance Futures Client successfully initialized
+2022-08-15 12:33:49,197 INFO :: Bitmex Client successfully initialized
+2022-08-15 12:33:49,337 INFO :: Binance connection opened
+2022-08-15 12:33:50,322 INFO :: Bitmex connection opened
+2022-08-15 12:33:54,721 INFO :: XBTUSD 24110.5 / 24111
+2022-08-15 12:33:55,237 INFO :: XBTUSD 24110.5 / 24111
+2022-08-15 12:34:01,250 INFO :: XBTUSD 24110.5 / 24111
+2022-08-15 12:34:05,739 INFO :: XBTUSD 24110.5 / 24111
+2022-08-15 12:34:08,949 INFO :: XBTUSD 24110.5 / 24111
+2022-08-15 12:34:10,280 INFO :: XBTUSD 24110.5 / 24111
+2022-08-15 12:34:16,248 INFO :: XBTUSD 24110.5 / 24111
+2022-08-15 12:34:20,745 INFO :: XBTUSD 24110.5 / 24111
+2022-08-15 12:34:25,240 INFO :: XBTUSD 24110.5 / 24111
+2022-08-15 12:34:28,970 INFO :: XBTUSD 24110.5 / 24111
+2022-08-15 12:34:30,251 INFO :: XBTUSD 24110.5 / 24111
+2022-08-15 12:34:31,246 INFO :: XBTUSD 24110.5 / 24111
+2022-08-15 12:34:35,743 INFO :: XBTUSD 24110.5 / 24111
+2022-08-15 12:34:38,945 INFO :: XBTUSD 24110.5 / 24111
+2022-08-15 12:34:47,972 INFO :: Binance Futures Client successfully initialized
+2022-08-15 12:34:48,627 INFO :: Bitmex Client successfully initialized
+2022-08-15 12:34:49,169 INFO :: Binance connection opened
+2022-08-15 12:34:49,596 INFO :: Bitmex connection opened
+2022-08-15 12:34:51,784 INFO :: XBTUSD 24110.5 / 24111
+2022-08-15 12:34:51,799 INFO :: XBTUSD 24110.5 / 24111
+2022-08-15 12:34:55,216 INFO :: XBTUSD 24110.5 / 24111
+2022-08-15 12:35:01,237 INFO :: XBTUSD 24110.5 / 24111
+2022-08-15 12:35:03,922 INFO :: XBTUSD 24110.5 / 24111
+2022-08-15 12:40:50,650 INFO :: Binance Futures Client successfully initialized
+2022-08-15 12:40:51,392 INFO :: Bitmex Client successfully initialized
+2022-08-15 12:40:51,801 INFO :: Binance connection opened
+2022-08-15 12:40:52,391 INFO :: Bitmex connection opened
+2022-08-15 12:40:57,199 INFO :: XBTUSD 24096.5 / 24111
+2022-08-15 12:40:57,214 INFO :: XBTUSD 24096.5 / 24111
+2022-08-15 12:41:01,219 INFO :: XBTUSD 24096.5 / 24111
+2022-08-15 12:41:03,956 INFO :: XBTUSD 24096.5 / 24111
+2022-08-15 12:41:05,716 INFO :: XBTUSD 24096.5 / 24111
+2022-08-15 12:41:08,931 INFO :: XBTUSD 24096.5 / 24111
+2022-08-15 12:41:10,212 INFO :: XBTUSD 24096.5 / 24111
+2022-08-15 12:41:16,222 INFO :: XBTUSD 24096.5 / 24111
+2022-08-15 12:41:20,732 INFO :: XBTUSD 24096.5 / 24111
+2022-08-15 12:41:25,213 INFO :: XBTUSD 24096.5 / 24111
+2022-08-15 12:41:30,272 INFO :: XBTUSD 24096.5 / 24111
+2022-08-15 12:41:31,220 INFO :: XBTUSD 24096.5 / 24111
+2022-08-15 12:41:37,869 INFO :: Binance Futures Client successfully initialized
+2022-08-15 12:41:38,699 INFO :: Bitmex Client successfully initialized
+2022-08-15 12:41:39,039 INFO :: Binance connection opened
+2022-08-15 12:41:39,687 INFO :: Bitmex connection opened
+2022-08-15 12:41:43,222 INFO :: XBTUSD 24096.5 / 24111
+2022-08-15 12:41:43,282 INFO :: XBTUSD 24096.5 / 24111
+2022-08-15 12:41:46,213 INFO :: XBTUSD 24096.5 / 24111
+2022-08-15 12:41:50,732 INFO :: XBTUSD 24096.5 / 24111
+2022-08-15 12:41:53,920 INFO :: XBTUSD 24096.5 / 24111
+2022-08-15 12:41:55,215 INFO :: XBTUSD 24096.5 / 24111
+2022-08-15 12:42:01,227 INFO :: XBTUSD 24096.5 / 24111
+2022-08-15 12:42:03,919 INFO :: XBTUSD 24096.5 / 24111
+2022-08-15 12:42:05,718 INFO :: XBTUSD 24096.5 / 24111
+2022-08-15 12:42:08,919 INFO :: XBTUSD 24096.5 / 24111
+2022-08-15 12:42:10,212 INFO :: XBTUSD 24096.5 / 24111
+2022-08-15 12:42:13,921 INFO :: XBTUSD 24096.5 / 24111
+2022-08-15 12:42:20,737 INFO :: XBTUSD 24096.5 / 24111
+2022-08-15 12:42:23,921 INFO :: XBTUSD 24096.5 / 24111
+2022-08-15 12:42:25,217 INFO :: XBTUSD 24096.5 / 24111
+2022-08-15 12:42:30,249 INFO :: XBTUSD 24096.5 / 24111
+2022-08-15 12:42:31,237 INFO :: XBTUSD 24096.5 / 24111
+2022-08-15 12:42:35,710 INFO :: XBTUSD 24096.5 / 24111
+2022-08-15 12:42:38,920 INFO :: XBTUSD 24096.5 / 24111
+2022-08-15 12:42:40,217 INFO :: XBTUSD 24096.5 / 24111
+2022-08-15 12:42:46,211 INFO :: XBTUSD 24096.5 / 24111
+2022-08-15 12:42:50,718 INFO :: XBTUSD 24096.5 / 24111
+2022-08-15 12:42:55,213 INFO :: XBTUSD 24096.5 / 24111
+2022-08-15 12:42:58,925 INFO :: XBTUSD 24096.5 / 24111
+2022-08-15 12:43:01,254 INFO :: XBTUSD 24096.5 / 24111
+2022-08-15 12:43:03,925 INFO :: XBTUSD 24096.5 / 24111
+2022-08-15 12:43:05,719 INFO :: XBTUSD 24096.5 / 24111
+2022-08-15 12:43:10,212 INFO :: XBTUSD 24096.5 / 24111
+2022-08-15 12:43:13,922 INFO :: XBTUSD 24096.5 / 24111
+2022-08-15 12:43:16,221 INFO :: XBTUSD 24096.5 / 24111
+2022-08-15 12:43:19,039 INFO :: XBTUSD 24096.5 / 24111
+2022-08-15 12:43:20,724 INFO :: XBTUSD 24096.5 / 24111
+2022-08-15 12:43:23,918 INFO :: XBTUSD 24096.5 / 24111
+2022-08-15 12:43:25,214 INFO :: XBTUSD 24096.5 / 24111
+2022-08-15 12:43:30,269 INFO :: XBTUSD 24096.5 / 24111
+2022-08-15 12:43:31,215 INFO :: XBTUSD 24096.5 / 24111
+2022-08-15 12:43:33,414 INFO :: XBTUSD 24096.5 / 24111
+2022-08-15 12:43:33,920 INFO :: XBTUSD 24104 / 24111
+2022-08-15 12:43:35,724 INFO :: XBTUSD 24104 / 24111
+2022-08-15 12:43:38,918 INFO :: XBTUSD 24104 / 24111
+2022-08-15 12:43:40,207 INFO :: XBTUSD 24104 / 24111
+2022-08-15 12:43:43,923 INFO :: XBTUSD 24104 / 24111
+2022-08-15 12:43:46,216 INFO :: XBTUSD 24104 / 24111
+2022-08-15 12:43:48,921 INFO :: XBTUSD 24104 / 24111
+2022-08-15 12:43:50,722 INFO :: XBTUSD 24104 / 24111
+2022-08-15 12:43:53,922 INFO :: XBTUSD 24104 / 24111
+2022-08-15 12:43:55,218 INFO :: XBTUSD 24104 / 24111
+2022-08-15 12:44:01,223 INFO :: XBTUSD 24104 / 24111
+2022-08-15 12:44:03,938 INFO :: XBTUSD 24108 / 24111
+2022-08-15 12:44:05,717 INFO :: XBTUSD 24108 / 24111
+2022-08-15 12:44:10,219 INFO :: XBTUSD 24108 / 24111
+2022-08-15 12:44:16,217 INFO :: XBTUSD 24108 / 24111
+2022-08-15 12:44:18,915 INFO :: XBTUSD 24108 / 24111
+2022-08-15 12:44:20,713 INFO :: XBTUSD 24108 / 24111
+2022-08-15 12:44:24,794 INFO :: Binance Futures Client successfully initialized
+2022-08-15 12:44:25,532 INFO :: Bitmex Client successfully initialized
+2022-08-15 12:44:26,009 INFO :: Binance connection opened
+2022-08-15 12:44:26,536 INFO :: Bitmex connection opened
+2022-08-15 12:44:29,392 INFO :: XBTUSD 24108 / 24111
+2022-08-15 12:45:53,121 INFO :: Binance Futures Client successfully initialized
+2022-08-15 12:45:53,938 INFO :: Bitmex Client successfully initialized
+2022-08-15 12:45:54,357 INFO :: Binance connection opened
+2022-08-15 12:45:54,984 INFO :: Bitmex connection opened
+2022-08-15 12:50:44,411 INFO :: Binance Futures Client successfully initialized
+2022-08-15 12:50:45,590 INFO :: Binance connection opened
+2022-08-15 12:50:46,739 INFO :: Bitmex Client successfully initialized
+2022-08-15 12:50:47,754 INFO :: Bitmex connection opened
+2022-08-15 12:50:52,010 INFO :: XBTUSD 24110.5 / 24111
+2022-08-15 12:50:52,026 INFO :: XBTUSD 24110.5 / 24111
+2022-08-15 12:57:07,534 INFO :: Binance Futures Client successfully initialized
+2022-08-15 12:57:08,743 INFO :: Binance connection opened
+2022-08-15 12:57:09,710 INFO :: Bitmex Client successfully initialized
+2022-08-15 12:57:10,660 INFO :: Bitmex connection opened
+2022-08-15 12:57:14,277 INFO :: XBTUSD 24110.5 / 24111
+2022-08-15 12:57:14,279 INFO :: XBTUSD 24110.5 / 24111
+2022-08-15 12:57:16,219 INFO :: XBTUSD 24110.5 / 24111
+2022-08-15 12:57:18,916 INFO :: XBTUSD 24110.5 / 24111
+2022-08-15 12:57:20,715 INFO :: XBTUSD 24110.5 / 24111
+2022-08-15 12:57:23,917 INFO :: XBTUSD 24110.5 / 24111
+2022-08-15 12:57:25,216 INFO :: XBTUSD 24110.5 / 24111
+2022-08-15 12:57:30,252 INFO :: XBTUSD 24110.5 / 24111
+2022-08-15 12:57:31,211 INFO :: XBTUSD 24110.5 / 24111
+2022-08-15 14:17:20,321 INFO :: Binance Futures Client successfully initialized
+2022-08-15 14:17:21,476 INFO :: Bitmex Client successfully initialized
+2022-08-15 14:17:21,580 INFO :: Binance connection opened
+2022-08-15 14:17:22,484 INFO :: Bitmex connection opened
+2022-08-15 14:17:26,803 INFO :: XBTUSD 24068.5 / 24086
+2022-08-15 14:17:26,814 INFO :: XBTUSD 24068.5 / 24086
+2022-08-15 14:17:30,217 INFO :: XBTUSD 24068.5 / 24086
+2022-08-15 14:17:30,736 INFO :: XBTUSD 24068.5 / 24086
+2022-08-15 14:17:35,226 INFO :: XBTUSD 24068.5 / 24086
