@@ -9,6 +9,7 @@ from connectors.binance_futures import BinanceFuturesClient
 from interface.styling import *
 from interface.logging_component import Logging
 from interface.watchlist_component import Watchlist
+from interface.trades_component import TradesWatch
 
 logger = logging.getLogger()
 
@@ -38,6 +39,9 @@ class Root(tk.Tk):
 
         self._logging_frame = Logging(self._left_frame, bg=BG_COLOR)
         self._logging_frame.pack(side=tk.TOP)
+
+        self._trades_frame = TradesWatch(self._right_frame, bg=BG_COLOR)
+        self._trades_frame.pack(side=tk.TOP)
 
         # self._logging_frame.add_log("This is a test message")
         # time.sleep(2)
