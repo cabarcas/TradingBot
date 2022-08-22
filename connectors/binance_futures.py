@@ -92,7 +92,7 @@ class BinanceFuturesClient:
 
         if exchange_info is not None:
             for contract_data in exchange_info['symbols']:
-                contracts[contract_data['pair']] = Contract(contract_data, "binance")
+                contracts[contract_data['symbol']] = Contract(contract_data, "binance")
 
         return contracts
 
@@ -109,7 +109,7 @@ class BinanceFuturesClient:
         if raw_candles is not None:
             for c in raw_candles:
                 candles.append(Candle(c, interval, "binance"))
-                print(c)
+                # print(c)
 
         return candles
 
@@ -211,7 +211,7 @@ class BinanceFuturesClient:
     def _on_open(self, ws):
         logger.info("Binance connection opened")
 
-        self.subscribe_channel(list(self.contracts.values()), "bookTicker")
+        # self.subscribe_channel(list(self.contracts.values()), "bookTicker")
 
     def _on_close(self, ws):
         logger.warning("Binance Websocket connection closed")

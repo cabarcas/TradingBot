@@ -4,6 +4,7 @@
 # 25 Watchlist Component: it allows us to monitor Market data. bid and ask price for some symbol.
 # 26 Watchlist Component, Adding a Symbol
 # 27 Watchlist Component, Removing a Symbol
+# 28 WatchList Component, Updating the WatchList: Displaying bid and ask data to the interface
 # but can monitor anything: an indicator value, last 1-hour volume, etc.
 # main is the entry point to the application
 # root_component will contain all code required for 4 component in the interface

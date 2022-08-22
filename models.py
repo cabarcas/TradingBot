@@ -38,7 +38,7 @@ class Candle:
             self.timestamp = self.timestamp - datetime.timedelta(minutes=BITMEX_TF_MINUTES[timeframe])
             # since Binance timestamp is in milliseconds and integer we the settings to the conversion
             self.timestamp = int(self.timestamp.timestamp() * 1000)
-            print(candle_info['timestamp'], dateutil.parser.isoparse(candle_info['timestamp']), self.timestamp)
+            # print(candle_info['timestamp'], dateutil.parser.isoparse(candle_info['timestamp']), self.timestamp)
             self.open = candle_info['open']
             self.high = candle_info['high']
             self.low = candle_info['low']
@@ -62,6 +62,7 @@ def tick_to_decimals(tick_size: float) -> int:
 class Contract:
     def __init__(self, contract_info, exchange):
         if exchange == "binance":
+            # print(contract_info)
             self.symbol = contract_info['symbol']
             self.base_asset = contract_info['baseAsset']
             self.quote_asset = contract_info['quoteAsset']
