@@ -42,7 +42,7 @@ class StrategyEditor(tk.Frame):
             {"code_name": "stop_loss", "widget": tk.Entry, "data_type": float, "width": 7},
             {"code_name": "parameters", "widget": tk.Button, "data_type": float, "text": "Parameters", "bg": BG_COLOR_2, "command": self._show_popup},
             {"code_name": "activation", "widget": tk.Button, "data_type": float, "text": "OFF", "bg": BTN_COLOR, "command": self._switch_strategy},
-            {"code_name": "delete", "widget": tk.Button, "data_type": float, "text": "X", "bg": BG_COLOR_2, "command": self._delete_row}
+            {"code_name": "delete", "widget": tk.Button, "data_type": float, "text": "X", "bg": BTN_COLOR, "command": self._delete_row}
         ]
 
         for idx, h in enumerate(self._headers):
@@ -72,8 +72,8 @@ class StrategyEditor(tk.Frame):
                 self.body_widgets[code_name][b_index] = tk.Entry(self._table_frame, justify=tk.CENTER)
             elif base_param['widget'] == tk.Button:
                 self.body_widgets[code_name][b_index] = tk.Button(self._table_frame, text=base_param['text'],
-                                                                  bg=base_param['bg'], fg=FG_COLOR,
-                                                                  command=lambda: base_param['command'](b_index))
+                                        bg=base_param['bg'], fg=FG_COLOR,
+                                        command=lambda frozen_command=base_param['command']: frozen_command(b_index))
             else:
                 continue
 
@@ -82,7 +82,11 @@ class StrategyEditor(tk.Frame):
         self._body_index += 1
 
     def _delete_row(self, b_index: int):
-        return
+
+        for element in self._base_params:
+            self.body_widgets[element['code_name']][b_index].grid_forget()
+
+            del self.body_widgets[element['code_name']][b_index]
 
     def _show_popup(self, b_index: int):
         return
