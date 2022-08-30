@@ -16,7 +16,7 @@ class StrategyEditor(tk.Frame):
 
         # if its empty is not going to load correctly
         self._all_contracts = ["BTCUSDT", "ETHUSDT"]
-        self._all_timeframes = ["1m", "5m", "15m",  "30m",  "1h",  "4h"]
+        self._all_timeframes = ["1m", "5m", "15m", "30m", "1h", "4h"]
 
         self._commands_frame = tk.Frame(self, bg=BG_COLOR)
         self._commands_frame.pack(side=tk.TOP)
@@ -31,18 +31,28 @@ class StrategyEditor(tk.Frame):
         self.body_widgets = dict()
 
         self._headers = ["Strategy", "Contract", "Timeframe", "Balance %", "TP %", "SL %"]
+
+        self._additional_parameters = dict()
+
+        self._extra_input = dict()
+
         # describe OptionMenu,
         self._base_params = [
-            {"code_name": "strategy_type", "widget": tk.OptionMenu, "data_type": str, "values": ["Technical", "Breakout"], "width": 10},
-            {"code_name": "contract", "widget": tk.OptionMenu, "data_type": str, "values": self._all_contracts, "width": 15},
+            {"code_name": "strategy_type", "widget": tk.OptionMenu, "data_type": str,
+             "values": ["Technical", "Breakout"], "width": 10},
+            {"code_name": "contract", "widget": tk.OptionMenu, "data_type": str, "values": self._all_contracts,
+             "width": 15},
             {"code_name": "timeframe", "widget": tk.OptionMenu, "data_type": str, "values": self._all_timeframes,
              "width": 7},
             {"code_name": "balance_pct", "widget": tk.Entry, "data_type": float, "width": 7},
             {"code_name": "take_profit", "widget": tk.Entry, "data_type": float, "width": 7},
             {"code_name": "stop_loss", "widget": tk.Entry, "data_type": float, "width": 7},
-            {"code_name": "parameters", "widget": tk.Button, "data_type": float, "text": "Parameters", "bg": BG_COLOR_2, "command": self._show_popup},
-            {"code_name": "activation", "widget": tk.Button, "data_type": float, "text": "OFF", "bg": BTN_COLOR, "command": self._switch_strategy},
-            {"code_name": "delete", "widget": tk.Button, "data_type": float, "text": "X", "bg": BTN_COLOR, "command": self._delete_row}
+            {"code_name": "parameters", "widget": tk.Button, "data_type": float, "text": "Parameters", "bg": BG_COLOR_2,
+             "command": self._show_popup},
+            {"code_name": "activation", "widget": tk.Button, "data_type": float, "text": "OFF", "bg": BTN_COLOR,
+             "command": self._switch_strategy},
+            {"code_name": "delete", "widget": tk.Button, "data_type": float, "text": "X", "bg": BTN_COLOR,
+             "command": self._delete_row}
         ]
 
         self._extra_params = {
@@ -86,10 +96,17 @@ class StrategyEditor(tk.Frame):
                 self.body_widgets[code_name][b_index] = tk.Button(self._table_frame, text=base_param['text'],
                                         bg=base_param['bg'], fg=FG_COLOR,
                                         command=lambda frozen_command=base_param['command']: frozen_command(b_index))
+
             else:
                 continue
 
             self.body_widgets[code_name][b_index].grid(row=b_index, column=col)
+
+        self._additional_parameters[b_index] = dict()
+
+        for strat, params in self._extra_params.items():
+            for param in params:
+                self._additional_parameters[b_index][param['code_name']] = None
 
         self._body_index += 1
 
@@ -110,7 +127,7 @@ class StrategyEditor(tk.Frame):
 
         self._popup_window.config(bg=BG_COLOR)
         self._popup_window.attributes("-topmost", "true")
-        self._popup_window.grab_set()
+        # self._popup_window.grab_set()
 
         self._popup_window.geometry(f"+{x - 80}+{y + 30}")
 
@@ -125,23 +142,37 @@ class StrategyEditor(tk.Frame):
             temp_label.grid(row=row_nb, column=0)
 
             if param['widget'] == tk.Entry:
-                temp_input = tk.Entry(self._popup_window, bg=BG_COLOR_2, justify=tk.CENTER, fg=FG_COLOR,
-                                      insertbackground=FG_COLOR)
+                self._extra_input[code_name] = tk.Entry(self._popup_window, bg=BG_COLOR_2, justify=tk.CENTER, fg=FG_COLOR,
+                                                        insertbackground=FG_COLOR)
+                if self._additional_parameters[b_index][code_name] is not None:
+                    self._extra_input[code_name].insert(tk.END, str(self._additional_parameters[b_index][code_name]))
             else:
                 continue
 
-            temp_input.grid(row=row_nb, column=1)
+            self._extra_input[code_name].grid(row=row_nb, column=1)
 
             row_nb += 1
 
-        # Validation Button
+        # Validation Button: store value when clicked then close popup window
 
         validation_button = tk.Button(self._popup_window, text="Validate", bg=BG_COLOR_2, fg=FG_COLOR,
                                       command=lambda: self._validate_parameters(b_index))
         validation_button.grid(row=row_nb, column=0, columnspan=2)
 
     def _validate_parameters(self, b_index: int):
-        return
+        # we loop through the parameters to get their values to store it before destroying the popup_window
+
+        strat_selected = self.body_widgets['strategy_type_var'][b_index].get()
+
+        for param in self._extra_params[strat_selected]:
+            code_name = param['code_name']
+
+            if self._extra_input[code_name].get() == "":
+                self._additional_parameters[b_index][code_name] = None
+            else:
+                self._additional_parameters[b_index][code_name] = param['data_type'](self._extra_input[code_name].get())
+
+        self._popup_window.destroy()
 
     def _switch_strategy(self, b_index: int):
         return
