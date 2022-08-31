@@ -1,5 +1,5 @@
-import logging
 import tkinter as tk
+import logging
 
 # from interface.styling import *
 from connectors.bitmex import BitmexClient
@@ -38,10 +38,10 @@ class Root(tk.Tk):
         self._watchlist_frame = Watchlist(self.binance.contracts, self.bitmex.contracts, self._left_frame, bg=BG_COLOR)
         self._watchlist_frame.pack(side=tk.TOP)
 
-        self._logging_frame = Logging(self._left_frame, bg=BG_COLOR)
-        self._logging_frame.pack(side=tk.TOP)
+        self.logging_frame = Logging(self._left_frame, bg=BG_COLOR)
+        self.logging_frame.pack(side=tk.TOP)
 
-        self._strategy_frame = StrategyEditor(self._right_frame, bg=BG_COLOR)
+        self._strategy_frame = StrategyEditor(self, self.binance, self.bitmex, self._right_frame, bg=BG_COLOR)
         self._strategy_frame.pack(side=tk.TOP)
 
         self._trades_frame = TradesWatch(self._right_frame, bg=BG_COLOR)
@@ -58,15 +58,15 @@ class Root(tk.Tk):
 
         # Logs
 
-        global precision
+
         for log in self.bitmex.logs:
             if not log['displayed']:
-                self._logging_frame.add_log(log['log'])
+                self.logging_frame.add_log(log['log'])
                 log['displayed'] = True
 
         for log in self.binance.logs:
             if not log['displayed']:
-                self._logging_frame.add_log(log['log'])
+                self.logging_frame.add_log(log['log'])
                 log['displayed'] = True
 
         # Watchlist prices

@@ -9,14 +9,25 @@ from models import *
 
 from interface.styling import *
 
+from connectors.binance_futures import BinanceFuturesClient
+from connectors.bitmex import BitmexClient
+
 
 class StrategyEditor(tk.Frame):
-    def __init__(self, *args, **kwargs):
+    def __init__(self, root, binance: BinanceFuturesClient, bitmex: BitmexClient, *args, **kwargs):
         super().__init__(*args, **kwargs)
 
+        self.root = root
+
+        self._exchanges = {"Binance": binance, "Bitmex": bitmex}
+
         # if its empty is not going to load correctly
-        self._all_contracts = ["BTCUSDT", "ETHUSDT"]
+        self._all_contracts = []
         self._all_timeframes = ["1m", "5m", "15m", "30m", "1h", "4h"]
+
+        for exchange, client in self._exchanges.items():
+            for symbol, contract in client.contracts.items():
+                self._all_contracts.append(symbol + "_" + exchange.capitalize())
 
         self._commands_frame = tk.Frame(self, bg=BG_COLOR)
         self._commands_frame.pack(side=tk.TOP)
@@ -94,8 +105,9 @@ class StrategyEditor(tk.Frame):
                 self.body_widgets[code_name][b_index] = tk.Entry(self._table_frame, justify=tk.CENTER)
             elif base_param['widget'] == tk.Button:
                 self.body_widgets[code_name][b_index] = tk.Button(self._table_frame, text=base_param['text'],
-                                        bg=base_param['bg'], fg=FG_COLOR,
-                                        command=lambda frozen_command=base_param['command']: frozen_command(b_index))
+                                                                  bg=base_param['bg'], fg=FG_COLOR,
+                                                                  command=lambda frozen_command=base_param[
+                                                                      'command']: frozen_command(b_index))
 
             else:
                 continue
@@ -142,7 +154,8 @@ class StrategyEditor(tk.Frame):
             temp_label.grid(row=row_nb, column=0)
 
             if param['widget'] == tk.Entry:
-                self._extra_input[code_name] = tk.Entry(self._popup_window, bg=BG_COLOR_2, justify=tk.CENTER, fg=FG_COLOR,
+                self._extra_input[code_name] = tk.Entry(self._popup_window, bg=BG_COLOR_2, justify=tk.CENTER,
+                                                        fg=FG_COLOR,
                                                         insertbackground=FG_COLOR)
                 if self._additional_parameters[b_index][code_name] is not None:
                     self._extra_input[code_name].insert(tk.END, str(self._additional_parameters[b_index][code_name]))
@@ -174,5 +187,47 @@ class StrategyEditor(tk.Frame):
 
         self._popup_window.destroy()
 
+    # activate or deactivate the strategy while checks at activation for missing parameters
     def _switch_strategy(self, b_index: int):
-        return
+
+        for param in ["balance_pct", "take_profit", "stop_loss"]:
+            if self.body_widgets[param][b_index].get() == "":
+                self.root.logging_frame.add_log(f"Missing {param} parameter")
+                return
+
+        strat_selected = self.body_widgets['strategy_type_var'][b_index].get()
+
+        for param in self._extra_params[strat_selected]:
+            if self._additional_parameters[b_index][param['code_name']] is None:
+                self.root.logging_frame.add_log(f"Missing {param['code_name']} parameter")
+                return
+
+        symbol = self.body_widgets['contract_var'][b_index].get().split("_")[0]
+        timeframe = self.body_widgets['timeframe_var'][b_index].get()
+        exchange = self.body_widgets['contract_var'][b_index].get().split("_")[1]
+
+        balance_pct = float(self.body_widgets['balance_pct'][b_index].get())
+        take_profit = float(self.body_widgets['take_profit'][b_index].get())
+        stop_loss = float(self.body_widgets['stop_loss'][b_index].get())
+
+        if self.body_widgets['activation'][b_index].cget("text") == "OFF":
+
+            for param in self._base_params:
+                code_name = param['code_name']
+
+                if code_name != "activation" and "_var" not in code_name:
+                    self.body_widgets[code_name][b_index].config(state=tk.DISABLED)
+
+                self.body_widgets['activation'][b_index].config(bg="darkgreen", text="ON")
+                self.root.logging_frame.add_log(f"{strat_selected} strategy on {symbol} / {timeframe} started")
+        else:
+            for param in self._base_params:
+                code_name = param['code_name']
+
+                if code_name != "activation" and "_var" not in code_name:
+                    self.body_widgets[code_name][b_index].config(state=tk.NORMAL)
+
+                self.body_widgets['activation'][b_index].config(bg="darkred", text="OFF")
+                self.root.logging_frame.add_log(f"{strat_selected} strategy on {symbol} / {timeframe} stopped")
+
+
