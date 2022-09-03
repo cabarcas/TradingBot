@@ -29497,3 +29497,23 @@
 2022-09-02 20:00:00,685 INFO :: XBTUSD 19998 / 20076
 2022-09-02 20:00:08,182 INFO :: XBTUSD 19998 / 20076
 2022-09-02 20:00:09,683 INFO :: XBTUSD 19998 / 20076
+2022-09-02 20:00:15,682 INFO :: XBTUSD 19998 / 20076
+2022-09-02 20:00:17,830 INFO :: XBTUSD 19998 / 20076
+2022-09-02 20:00:18,369 INFO :: XBTUSD 19998 / 20076
+2022-09-02 20:00:18,393 INFO :: XBTUSD 19998 / 20076
+2022-09-02 20:00:20,183 INFO :: XBTUSD 19998 / 20076
+2022-09-02 20:31:53,380 INFO :: Binance Futures Client successfully initialized
+2022-09-02 20:31:54,174 INFO :: Bitmex Client successfully initialized
+2022-09-02 20:31:54,552 INFO :: Binance connection opened
+2022-09-02 20:31:54,834 WARNING :: Binance Websocket connection closed
+2022-09-02 20:31:55,138 INFO :: Bitmex connection opened
+2022-09-02 20:31:57,964 INFO :: Binance connection opened
+2022-09-02 20:31:58,314 WARNING :: Binance Websocket connection closed
+2022-09-02 20:32:01,479 INFO :: Binance connection opened
+2022-09-02 20:32:01,760 WARNING :: Binance Websocket connection closed
+2022-09-02 20:32:04,918 INFO :: Binance connection opened
+2022-09-02 20:32:05,203 WARNING :: Binance Websocket connection closed
+2022-09-02 20:32:44,284 INFO :: Binance Futures Client successfully initialized
+2022-09-02 20:32:45,010 INFO :: Bitmex Client successfully initialized
+2022-09-02 20:32:45,397 INFO :: Binance connection opened
+2022-09-02 20:32:46,048 INFO :: Bitmex connection opened

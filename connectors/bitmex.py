@@ -11,6 +11,8 @@ import hashlib
 import websocket
 import json
 
+import dateutil.parser
+
 import threading
 
 from models import *
@@ -202,6 +204,7 @@ class BitmexClient:
         logger.info("Bitmex connection opened")
 
         self.subscribe_channel("instrument")
+        self.subscribe_channel("trade")
 
     def _on_close(self, ws):
         logger.warning("Bitmex Websocket connection closed")
@@ -230,9 +233,18 @@ class BitmexClient:
 
                     # print(symbol, self.prices[symbol])
 
-                    if symbol == "XBTUSD":
-                        self._add_log(symbol + " " + str(self.prices[symbol]['bid']) + " / " +
-                                      str(self.prices[symbol]['ask']))
+                    # if symbol == "XBTUSD":
+                    #    self._add_log(symbol + " " + str(self.prices[symbol]['bid']) + " / " +
+                    #                  str(self.prices[symbol]['ask']))
+
+                    # timestamp represents the time of the trade
+                    if data['table'] == "trade":
+
+                        for d in data['data']:
+
+                            symbol = d['symbol']
+
+                            ts = int(dateutil.parser.isoparse(d['timestamp']).timestamp() * 1000)
 
     def subscribe_channel(self, topic: str):
         data = dict()
