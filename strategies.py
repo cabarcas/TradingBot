@@ -1,6 +1,8 @@
 import logging
 from typing import *
 
+import pandas as pd
+
 from models import *
 
 logger = logging.getLogger()
@@ -79,17 +81,64 @@ class Strategy:
             return "new_candle"
 
 
+# we will use candlesticks to calculate indicators: macd and rsi
 class TechnicalStrategy(Strategy):
     def __init__(self, contract: Contract, exchange: str, timeframe: str, balance_pct: float, take_profit: float,
                  stop_loss: float, other_params: Dict):
         super().__init__(contract, exchange, timeframe, balance_pct, take_profit, stop_loss)
 
-        self.ema_fast = other_params['ema_fast']
-        self.ema_slow = other_params['ema_slow']
-        self.ema_signal = other_params['ema_signal']
+        self._ema_fast = other_params['ema_fast']
+        self._ema_slow = other_params['ema_slow']
+        self._ema_signal = other_params['ema_signal']
 
         # print("Activated strategy for ", contract.symbol)
+        self._rsi_length = other_params['rsi_length']
 
+    # relative strength index
+    def _rsi(self):
+        close_list = []
+        for candle in self.candles:
+            close_list.append(candle.close)
+        # we'll need RSI periods or number of candles used to calculate the RSI.
+        closes = pd.Series(close_list)
+
+        # we need to calculate average gain and loss over the period.
+        # 42 07:42 formula & calculation
+        return
+
+    # moving average convergence-divergence in 4 steps:
+    # 1. Fast EMA calculation
+    # 2. Slow EMA calculation
+    # 3. Fast EMA - Slow EMA
+    # 4. EMA on the result of step 3
+    # we'll need a list of EMAS, each corresponding to each candlestick recorded
+    # we only need to compute the EMA based on the close price of each candle
+    # also we will provide a list of close prices of our candles
+    def _macd(self) -> Tuple[float, float]:
+        close_list = []
+        for candle in self.candles:
+            close_list.append(candle.close)
+        # we use pandas to work with Dataframes or time series since candles can be represented as time series
+        # each row is a new timestamp and columns represent open, high, low and close price
+        # we convert the list of close prices to a pandas series object
+        closes = pd.Series(close_list)
+        # we calculate the EMA of a series using ewm (Exponential Weighted Functions) then the mean with mean method
+        # span is the period chosen
+        ema_fast = closes.ewm(span=self._ema_fast).mean()
+        ema_slow = closes.ewm(span=self._ema_slow).mean()
+
+        macd_line = ema_fast - ema_slow
+        # we will calculate when there is a new candle, since we're interested in the last finished candle
+        # the signal will depend on whether the macd line is above or below the macd signal line.
+        # a long signal when the macd line goes above the signal line
+        # returning a tuple of 2 elements: macd line  and macd signal of the previous candle
+        macd_signal = macd_line.ewm(span=self._ema_signal).mean()
+
+        return macd_line[-2], macd_signal[-2]
+
+    def _check_signal(self):
+
+        macd_line, macd_signal = self._macd()
 
 class BreakoutStrategy(Strategy):
     def __init__(self, contract: Contract, exchange: str, timeframe: str, balance_pct: float, take_profit: float,
