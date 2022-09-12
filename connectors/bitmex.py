@@ -17,6 +17,8 @@ import threading
 
 from models import *
 
+from strategies import TechnicalStrategy, BreakoutStrategy
+
 # bitmex indicate the time of candle with ISO 8601 2021-01-24T10:00:.000Z format. Date and time separated
 # by T and Z or UTC format. we want to convert both exchanges format to Unix timestamp,
 
@@ -42,6 +44,7 @@ class BitmexClient:
         self.balances = self.get_balances()
 
         self.prices = dict()
+        self.strategies: typing.Dict[int, typing.Union[TechnicalStrategy, BreakoutStrategy]] = dict()
 
         # we add logs here, root take this list, loop through it and display the new items
         self.logs = []
@@ -245,6 +248,10 @@ class BitmexClient:
                             symbol = d['symbol']
 
                             ts = int(dateutil.parser.isoparse(d['timestamp']).timestamp() * 1000)
+
+                            for key, strat in self.strategies.items():
+                                if strat.contract.symbol == symbol:
+                                    strat.parse_trades(float(d['price']), float(d['size']), ts)
 
     def subscribe_channel(self, topic: str):
         data = dict()

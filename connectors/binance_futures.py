@@ -40,10 +40,10 @@ class BinanceFuturesClient:
         self.prices = dict()
         self.strategies: typing.Dict[int, typing.Union[TechnicalStrategy, BreakoutStrategy]] = dict()
 
+        self.logs = []
+
         self._ws_id = 1
         self._ws = None
-
-        self.logs = []
 
         t = threading.Thread(target=self._start_ws)
         t.start()
@@ -95,7 +95,8 @@ class BinanceFuturesClient:
 
         if exchange_info is not None:
             for contract_data in exchange_info['symbols']:
-                contracts[contract_data['symbol']] = Contract(contract_data, "binance")
+                if contract_data['marginAsset'] != "BUSD":
+                    contracts[contract_data['symbol']] = Contract(contract_data, "binance")
 
         return contracts
 
@@ -145,11 +146,11 @@ class BinanceFuturesClient:
 
         return balances
 
-    def place_order(self, contract: Contract, side: str, quantity: float, order_type: str, price=None,
+    def place_order(self, contract: Contract, order_type: str, quantity: float, side: str, price=None,
                     tif=None) -> OrderStatus:
         data = dict()
         data['symbol'] = contract.symbol
-        data['side'] = side
+        data['side'] = side.upper()
         data['quantity'] = round(round(quantity / contract.lot_size) * contract.lot_size, 8)
         data['type'] = order_type
 
@@ -244,6 +245,10 @@ class BinanceFuturesClient:
             elif data['e'] == "aggTrade":
 
                 symbol = data['s']
+
+                for key, strat in self.strategies.items():
+                    if strat.contract.symbol == symbol:
+                        strat.parse_trades(float(data['p']), float(data['q']), data['T'])
 
     def subscribe_channel(self, contracts: typing.List[Contract], channel: str):
         data = dict()

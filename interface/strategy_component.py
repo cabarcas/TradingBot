@@ -14,6 +14,7 @@ from connectors.bitmex import BitmexClient
 
 from strategies import TechnicalStrategy, BreakoutStrategy
 
+
 class StrategyEditor(tk.Frame):
     def __init__(self, root, binance: BinanceFuturesClient, bitmex: BitmexClient, *args, **kwargs):
         super().__init__(*args, **kwargs)
@@ -223,7 +224,7 @@ class StrategyEditor(tk.Frame):
 
             new_strategy.candles = self._exchanges[exchange].get_historical_candles(contract, timeframe)
 
-            # means there is an error in the request
+            # means there is an error durign the request
             if len(new_strategy.candles) == 0:
                 self.root.logging_frame.add_log(f"No historical data retrieved for {contract.symbol}")
                 return
@@ -265,4 +266,3 @@ class StrategyEditor(tk.Frame):
                 # but each strategies will have their own unique attributes
                 # and conditions to enter a trade
                 #
-
