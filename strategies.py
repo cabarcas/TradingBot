@@ -94,17 +94,36 @@ class TechnicalStrategy(Strategy):
         # print("Activated strategy for ", contract.symbol)
         self._rsi_length = other_params['rsi_length']
 
-    # relative strength index
+    # relative strength index, formulas:
+    # 100 - (100/1 + RS); RS = Relative Strength RS = Average Gain / Average Loss
     def _rsi(self):
         close_list = []
         for candle in self.candles:
             close_list.append(candle.close)
         # we'll need RSI periods or number of candles used to calculate the RSI.
         closes = pd.Series(close_list)
+        # we need to calculate average gain and loss over the period to get a pandas series representing the variations,
+        # the gains and the losses between each close price, using diff() method.
+        # we create two delta series to separate the gains form the losses
+        delta = closes.diff().dropna()
 
-        # we need to calculate average gain and loss over the period.
-        # 42 07:42 formula & calculation
-        return
+        up, down = delta.copy(), delta.copy()
+        # filters rows under 0 and keeps the gains only
+        up[up < 0] = 0
+        # filter rows higher than 0 set them to 0
+        down[down > 0] = 0
+
+        # use moving average to calculate the average gains
+        avg_gain = up.ewm(com=(self._rsi_length - 1), min_periods=self._rsi_length).mean()
+        avg_loss = down.abs().ewm(com=(self._rsi_length - 1), min_periods=self._rsi_length).mean()
+
+        rs = avg_gain / avg_loss
+
+        rsi = 100 - 100 / (1 + rs)
+        rsi = rsi.round(2)
+
+        # iloc select data in row number
+        return rsi.iloc[-2]
 
     # moving average convergence-divergence in 4 steps:
     # 1. Fast EMA calculation
@@ -134,11 +153,25 @@ class TechnicalStrategy(Strategy):
         # returning a tuple of 2 elements: macd line  and macd signal of the previous candle
         macd_signal = macd_line.ewm(span=self._ema_signal).mean()
 
-        return macd_line[-2], macd_signal[-2]
+        return macd_line.iloc[-2], macd_signal.iloc[-2]
 
     def _check_signal(self):
 
         macd_line, macd_signal = self._macd()
+        rsi = self._rsi()
+
+        # print(rsi, macd_line, macd_signal)
+
+        # if rsi is below 30 (contract is oversold) we have a long signal
+        if rsi < 30 and macd_line > macd_signal:
+            return 1
+        # if rsi is above 70 (contract is overbought) is a short signal
+        elif rsi > 70 and macd_line < macd_signal:
+            return -1
+        else:
+            return 0
+
+
 
 class BreakoutStrategy(Strategy):
     def __init__(self, contract: Contract, exchange: str, timeframe: str, balance_pct: float, take_profit: float,
