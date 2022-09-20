@@ -1,4 +1,5 @@
 import logging
+import time
 from typing import *
 
 import pandas as pd
@@ -11,8 +12,11 @@ TF_EQUIV = {"1m": 60, "5m": 300, "15m": 900, "30m": 900, "1h": 3600, "4h": 14400
 
 
 class Strategy:
-    def __init__(self, contract: Contract, exchange: str, timeframe: str, balance_pct: float, take_profit: float,
-                 stop_loss: float):
+    def __init__(self, client, contract: Contract, exchange: str, timeframe: str, balance_pct: float, take_profit: float,
+                stop_loss: float):
+
+        self.client = client
+
         self.contract = contract
         self.exchange = exchange
         self.tf = timeframe
@@ -21,11 +25,19 @@ class Strategy:
         self.take_profit = take_profit
         self.stop_loss = stop_loss
 
+        self.open_position = False
+
         self.candles: List[Candle] = []
 
     # 3 cases: update same current candle, new candle, new candle + missing candles
     # by comparing the timestamp of the new trade with the timestamp of the most recent candle we have recorded
     def parse_trades(self, price: float, size: float, timestamp: int) -> str:
+
+        timestamp_diff = int(time.time() * 1000) - timestamp
+        if timestamp_diff >= 2000:
+            logger.warning("%s %s: %s milliseconds of difference between the current time and the trade time",
+                        self.exchange, self.contract.symbol, timestamp_diff)
+            # if you see this msg to often means there is something wrong with check_signal that slows websocket updates
 
         last_candle = self.candles[-1]
 
@@ -53,7 +65,7 @@ class Strategy:
             for missing in range(missing_candles):
                 new_ts = last_candle.timestamp + self.tf_equiv
                 candle_info = {'ts': new_ts, 'open': last_candle.close, 'high': last_candle.close,
-                               'low': last_candle.close, 'close': last_candle.close, 'volume': 0}
+                            'low': last_candle.close, 'close': last_candle.close, 'volume': 0}
                 new_candle = Candle(candle_info, self.tf, "parse_trade")
 
                 self.candles.append(new_candle)
@@ -80,12 +92,26 @@ class Strategy:
 
             return "new_candle"
 
+# we write open_position to further our signal processing
 
-# we will use candlesticks to calculate indicators: macd and rsi
+    def _open_position(self, signal_result: int):
+
+        # pass the contract, current price, balance percentage parameter
+        trade_size = self.client.get_trade_size(self.contract, self.candles[-1].close, self.balance_pct)
+        if trade_size is None:
+            return
+
+
+# we have almost all the info to send a buy or sell order, the signal side.
+# we are going to place a market order -so no bid/ask price required at this point.
+# if you need bid/ask price you can create an argument in check_signal e.g. bid: float
+# the only element still miss is trade size based on a percentage of the account balance
+# trade size is calculated differently on each exchange due to the nature of the contract on these platforms
+# in each connector we create a get_trade_size() method
+
 class TechnicalStrategy(Strategy):
-    def __init__(self, contract: Contract, exchange: str, timeframe: str, balance_pct: float, take_profit: float,
-                 stop_loss: float, other_params: Dict):
-        super().__init__(contract, exchange, timeframe, balance_pct, take_profit, stop_loss)
+    def __init__(self, client, contract: Contract, exchange: str, timeframe: str, balance_pct: float, take_profit: float, stop_loss: float, other_params: Dict):
+        super().__init__(client, contract, exchange, timeframe, balance_pct, take_profit, stop_loss)
 
         self._ema_fast = other_params['ema_fast']
         self._ema_slow = other_params['ema_slow']
@@ -93,6 +119,8 @@ class TechnicalStrategy(Strategy):
 
         # print("Activated strategy for ", contract.symbol)
         self._rsi_length = other_params['rsi_length']
+
+        # using candlesticks to calculate indicators with 2 indicators rsi and macd
 
     # relative strength index, formulas:
     # 100 - (100/1 + RS); RS = Relative Strength RS = Average Gain / Average Loss
@@ -125,7 +153,7 @@ class TechnicalStrategy(Strategy):
         # iloc select data in row number
         return rsi.iloc[-2]
 
-    # moving average convergence-divergence in 4 steps:
+    # moving average convergence-divergence in 4 steps: (EMA = exponential moving average)
     # 1. Fast EMA calculation
     # 2. Slow EMA calculation
     # 3. Fast EMA - Slow EMA
@@ -170,13 +198,25 @@ class TechnicalStrategy(Strategy):
             return -1
         else:
             return 0
+# now we're able to calculate if we have a long or short signal for each strategy
+# the questions are: How and When we call check_signal methods.
+# "When" depends on you, want to call it everytime we have a live price update ? is it useful to do so ?
+# want to call it once per candle ? there can be many answers, or you could call it only at some specific time of the day
+# e.g. you noticed that the macd of 8 is a good indicator por the rest of the daily trend
 
+    def check_trade(self, tick_type: str):
+        # we compute the indicators and check for a new trade only when there is a new candle
+        if tick_type == "new_candle" and not self.open_position:
+            signal_result = self._check_signal()
+
+            if signal_result in [-1, 1]:
+                self._open_position(signal_result)
 
 
 class BreakoutStrategy(Strategy):
-    def __init__(self, contract: Contract, exchange: str, timeframe: str, balance_pct: float, take_profit: float,
+    def __init__(self, client, contract: Contract, exchange: str, timeframe: str, balance_pct: float, take_profit: float,
                  stop_loss: float, other_params: Dict):
-        super().__init__(contract, exchange, timeframe, balance_pct, take_profit, stop_loss)
+        super().__init__(client, contract, exchange, timeframe, balance_pct, take_profit, stop_loss)
 
         self._min_volume = other_params['min_volume']
 
@@ -191,3 +231,21 @@ class BreakoutStrategy(Strategy):
         else:
             return 0
         # logic useful for implementing inside bar or outside bar patterns
+
+# 43 Adding more conditions for entering a Trade or not 00:03
+# we are able to know if we have long or short signal for each strategy,
+# we need to know who and when are we going a check_signal method
+
+    def check_trade(self, tick_type: str):
+        # we compute the indicators and check for a new trade only when there is a new candle
+        if not self.open_position:
+            signal_result = self._check_signal()
+
+            if signal_result in [-1, 1]:
+                self._open_position(signal_result)
+
+    # if check_signal at every trade if the calculations in it are too heavy and there are many trade updates
+    # coming through the websocket the updates may start to delay. to fix this we calculate the difference between
+    # the current Unix timestamp and the timestamp of the trade when we parse this trade in parse_trades
+
+

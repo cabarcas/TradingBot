@@ -98,7 +98,7 @@ class BitmexClient:
             return response.json()
         else:
             logger.error("Error while making %s request to %s: %s (error code %s)",
-                         method, endpoint, response.json(), response.status_code)
+                        method, endpoint, response.json(), response.status_code)
             return None
 
     def get_contracts(self) -> typing.Dict[str, Contract]:
@@ -194,7 +194,7 @@ class BitmexClient:
 
     def _start_ws(self):
         self._ws = websocket.WebSocketApp(self._wss_url, on_open=self._on_open, on_close=self._on_close,
-                                          on_error=self._on_error, on_message=self._on_message)
+                                        on_error=self._on_error, on_message=self._on_message)
 
         while True:
             try:
@@ -251,7 +251,10 @@ class BitmexClient:
 
                             for key, strat in self.strategies.items():
                                 if strat.contract.symbol == symbol:
-                                    strat.parse_trades(float(d['price']), float(d['size']), ts)
+                                    res = strat.parse_trades(float(d['price']), float(d['size']), ts)
+                                    strat.check_trade(res)
+                                    # example to pass bid or ask price to open_position
+                                    # strat.check_trade(res, self.prices[symbol]['bid'])
 
     def subscribe_channel(self, topic: str):
         data = dict()
@@ -263,3 +266,39 @@ class BitmexClient:
             self._ws.send(json.dumps(data))
         except Exception as e:
             logger.error("Websocket error while subscribing to %s: %s", topic, e)
+
+    # balance is in bitcoin
+    def get_trade_size(self, contract: Contract, price: float, balance_pct: float):
+
+        balance = self.get_balances()
+        if balance is not None:
+            if 'XBt' in balance:
+                balance = balance['XBt'].wallet_balance
+            else:
+                return None
+        else:
+            return None
+
+        # with the XBT amount of order we want to place, we need to convert it to a number of contracts to buy or sell
+        # this calculation will depend on the type of contract
+        # to know of the type of contract we need to add more attributes to the contract data model for Bitmex
+
+        xbt_size = balance * balance_pct / 100
+
+        # number of contracts to trade is XBT amount to invest divided by XBT value of a contract.
+        # we need to find the value of a contract depending on the type of contract inverse, quanto, etc.
+        # can be found in bitmex documentation in futures contract specifications
+
+        # is inverse
+        if contract.inverse:
+            contracts_number = xbt_size / (contract.multiplier / price)
+        # is quanto
+        elif contract.quanto:
+            contracts_number = xbt_size / (contract.multiplier * price)
+        # not inverse or quanto: contract is a linear futures and calculation is same as quanto
+        else:
+            contracts_number = xbt_size / (contract.multiplier * price)
+
+        logger.info("Bitmex current XBT balance = %s, contracts number = %s", balance, contracts_number)
+
+        return int(contracts_number)

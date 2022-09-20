@@ -84,8 +84,8 @@ class BinanceFuturesClient:
         if response.status_code == 200:
             return response.json()
         else:
-            logger.error("Error while making %s request to %s: %s (error code %s)",
-                         method, endpoint, response.json(), response.status_code)
+            logger.error("Error while making %s request to %s: %s (error code %s)", method, endpoint, response.json(),
+                         response.status_code)
             return None
 
     def get_contracts(self) -> typing.Dict[str, Contract]:
@@ -242,13 +242,14 @@ class BinanceFuturesClient:
                     self.prices[symbol]['bid'] = float(data['b'])
                     self.prices[symbol]['ask'] = float(data['a'])
 
-            elif data['e'] == "aggTrade":
+            if data['e'] == "aggTrade":
 
                 symbol = data['s']
 
                 for key, strat in self.strategies.items():
                     if strat.contract.symbol == symbol:
-                        strat.parse_trades(float(data['p']), float(data['q']), data['T'])
+                        res = strat.parse_trades(float(data['p']), float(data['q']), data['T'])
+                        strat.check_trade(res)
 
     def subscribe_channel(self, contracts: typing.List[Contract], channel: str):
         data = dict()
@@ -264,3 +265,28 @@ class BinanceFuturesClient:
             logger.error("Websocket error while subscribing to %s %s updates: %s", len(contracts), channel, e)
 
         self._ws_id += 1
+
+    def get_trade_size(self, contract: Contract, price: float, balance_pct: float):
+        # the contract need to be able to round the quantity to the right lot size.
+
+        # check balance is updated and have USDT key in the balance dictionary we obtained
+        balance = self.get_balances()
+        if balance is not None:
+            if 'USDT' in balance:
+                # we replace what we got here by the value of the USDT wallet balance
+                balance = balance['USDT'].wallet_balance
+            else:
+                return None
+        else:
+            return None
+
+        trade_size = (balance * balance_pct / 100) / price
+
+        trade_size = round(round(trade_size / contract.lot_size) * contract.lot_size, 8)
+
+        logger.info("Binance Futures current USDT balance = %s, trade size = %s", balance, trade_size)
+
+        return trade_size
+
+    # to call this method from strategy class we need to have the connector available in this class.
+    # we pass connector object when initializing strategy object
