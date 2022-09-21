@@ -35,7 +35,7 @@ class StrategyEditor(tk.Frame):
         self._table_frame.pack(side=tk.TOP)
 
         self._add_button = tk.Button(self._commands_frame, text="Add strategy", font=GLOBAL_FONT,
-                                     command=self._add_strategy_row, bg=BG_COLOR_2, fg=FG_COLOR)
+                                    command=self._add_strategy_row, bg=BG_COLOR_2, fg=FG_COLOR)
         self._add_button.pack(side=tk.TOP)
 
         self.body_widgets = dict()
@@ -97,7 +97,7 @@ class StrategyEditor(tk.Frame):
                 self.body_widgets[code_name + "_var"][b_index] = tk.StringVar()
                 self.body_widgets[code_name + "_var"][b_index].set(base_param['values'][0])
                 self.body_widgets[code_name][b_index] = tk.OptionMenu(self._table_frame,
-                                                                      self.body_widgets[code_name + "_var"][b_index],
+                                                                    self.body_widgets[code_name + "_var"][b_index],
                                                                       *base_param['values'])
                 self.body_widgets[code_name][b_index].config(width=base_param['width'])
 
@@ -105,9 +105,9 @@ class StrategyEditor(tk.Frame):
                 self.body_widgets[code_name][b_index] = tk.Entry(self._table_frame, justify=tk.CENTER)
             elif base_param['widget'] == tk.Button:
                 self.body_widgets[code_name][b_index] = tk.Button(self._table_frame, text=base_param['text'],
-                                                                  bg=base_param['bg'], fg=FG_COLOR,
-                                                                  command=lambda frozen_command=base_param[
-                                                                      'command']: frozen_command(b_index))
+                                                                bg=base_param['bg'], fg=FG_COLOR,
+                                                                command=lambda frozen_command=base_param[
+                                                                    'command']: frozen_command(b_index))
 
             else:
                 continue
@@ -169,7 +169,7 @@ class StrategyEditor(tk.Frame):
         # Validation Button: store value when clicked then close popup window
 
         validation_button = tk.Button(self._popup_window, text="Validate", bg=BG_COLOR_2, fg=FG_COLOR,
-                                      command=lambda: self._validate_parameters(b_index))
+                                    command=lambda: self._validate_parameters(b_index))
         validation_button.grid(row=row_nb, column=0, columnspan=2)
 
     def _validate_parameters(self, b_index: int):

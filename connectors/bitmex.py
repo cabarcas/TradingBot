@@ -98,7 +98,7 @@ class BitmexClient:
             return response.json()
         else:
             logger.error("Error while making %s request to %s: %s (error code %s)",
-                        method, endpoint, response.json(), response.status_code)
+                         method, endpoint, response.json(), response.status_code)
             return None
 
     def get_contracts(self) -> typing.Dict[str, Contract]:
@@ -179,7 +179,7 @@ class BitmexClient:
 
         return order_status
 
-    def get_order_status(self, order_id: str, contract: Contract) -> OrderStatus:
+    def get_order_status(self, contract: Contract, order_id: int) -> OrderStatus:
 
         data = dict()
         data['symbol'] = contract.symbol
@@ -194,7 +194,7 @@ class BitmexClient:
 
     def _start_ws(self):
         self._ws = websocket.WebSocketApp(self._wss_url, on_open=self._on_open, on_close=self._on_close,
-                                        on_error=self._on_error, on_message=self._on_message)
+                                          on_error=self._on_error, on_message=self._on_message)
 
         while True:
             try:
@@ -268,6 +268,7 @@ class BitmexClient:
             logger.error("Websocket error while subscribing to %s: %s", topic, e)
 
     # balance is in bitcoin
+    # noinspection SpellCheckingInspection
     def get_trade_size(self, contract: Contract, price: float, balance_pct: float):
 
         balance = self.get_balances()

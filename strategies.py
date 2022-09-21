@@ -2,9 +2,16 @@ import logging
 import time
 from typing import *
 
+# allows call delay without block open_position execution
+from threading import Timer
+
 import pandas as pd
 
 from models import *
+
+if TYPE_CHECKING:
+    from connectors.bitmex import BitmexClient
+    from connectors.binance_futures import BinanceFuturesClient
 
 logger = logging.getLogger()
 
@@ -12,8 +19,8 @@ TF_EQUIV = {"1m": 60, "5m": 300, "15m": 900, "30m": 900, "1h": 3600, "4h": 14400
 
 
 class Strategy:
-    def __init__(self, client, contract: Contract, exchange: str, timeframe: str, balance_pct: float, take_profit: float,
-                stop_loss: float):
+    def __init__(self, client: Union["BitmexClient", "BinanceFuturesClient"], contract: Contract, exchange: str,
+                timeframe: str, balance_pct: float, take_profit: float, stop_loss: float, strat_name):
 
         self.client = client
 
@@ -25,9 +32,18 @@ class Strategy:
         self.take_profit = take_profit
         self.stop_loss = stop_loss
 
-        self.open_position = False
+        self.strat_name = strat_name
+
+        self.ongoing_position = False
 
         self.candles: List[Candle] = []
+        self.trades: List[Trade] = []
+        self.logs = []
+
+    # add a log message to the log list while showing the same message on the terminal
+    def _add_log(self, msg: str):
+        logger.info("%s", msg)
+        self.logs.append({"log": msg, "displayed": False})
 
     # 3 cases: update same current candle, new candle, new candle + missing candles
     # by comparing the timestamp of the new trade with the timestamp of the most recent candle we have recorded
@@ -92,7 +108,25 @@ class Strategy:
 
             return "new_candle"
 
-# we write open_position to further our signal processing
+    def _check_order_status(self, order_id):
+
+        order_status = self.client.get_order_status(self.contract, order_id)
+
+        # request is successful
+        if order_status is not None:
+            logger.info("%s order status: %s", self.exchange, order_status.status)
+
+        if order_status.status == "filled":
+            for trade in self.trades:
+                if trade.entry_id == order_id:
+                    trade.entry_price = order_status.avg_price
+                    break
+            return
+
+        t = Timer(2.0, lambda: self._check_order_status(order_id))
+        t.start()
+
+    # we write open_position to further our signal processing
 
     def _open_position(self, signal_result: int):
 
@@ -100,6 +134,35 @@ class Strategy:
         trade_size = self.client.get_trade_size(self.contract, self.candles[-1].close, self.balance_pct)
         if trade_size is None:
             return
+
+        # we don't log directly instead we make a list of logs and update_ui put them to the logging frame
+        order_side = "buy" if signal_result == 1 else "sell"
+        position_side = "long" if signal_result == 1 else "short"
+
+        self._add_log(f"{position_side.capitalize()} signal on {self.contract.symbol}{self.tf}")
+
+        order_status = self.client.place_order(self.contract, "MARKET", trade_size, order_side)
+
+        # if condition true the request was successful so the order is placed
+        if order_status is not None:
+            self._add_log(f"{order_side.capitalize()} order placed on {self.exchange} | {order_status.status}")
+
+            self.ongoing_position = True
+
+            avg_fill_price = None
+
+            # 2 cases: order is immediately executed returning order_status "filled" depending on the exchange
+            if order_status.status == "filled":
+                avg_fill_price = order_status.avg_price
+            # execute get_order_status every to 2 seconds until we get the execution price
+            else:
+                t = Timer(2.0, lambda: self._check_order_status(order_status.order_id))
+                t.start()
+
+            new_trade = Trade({"time": int(time.time() * 1000), "entry_price": avg_fill_price,
+                               "contract": self.contract, "strategy": self.strat_name, "side": position_side,
+                               "status": "open", "pnl": 0, "quantity": trade_size, "entry_id": order_status.order_id})
+            self.trades.append(new_trade)
 
 
 # we have almost all the info to send a buy or sell order, the signal side.
@@ -110,8 +173,9 @@ class Strategy:
 # in each connector we create a get_trade_size() method
 
 class TechnicalStrategy(Strategy):
-    def __init__(self, client, contract: Contract, exchange: str, timeframe: str, balance_pct: float, take_profit: float, stop_loss: float, other_params: Dict):
-        super().__init__(client, contract, exchange, timeframe, balance_pct, take_profit, stop_loss)
+    def __init__(self, client, contract: Contract, exchange: str, timeframe: str, balance_pct: float,
+                 take_profit: float, stop_loss: float, other_params: Dict):
+        super().__init__(client, contract, exchange, timeframe, balance_pct, take_profit, stop_loss, "Technical")
 
         self._ema_fast = other_params['ema_fast']
         self._ema_slow = other_params['ema_slow']
@@ -198,15 +262,16 @@ class TechnicalStrategy(Strategy):
             return -1
         else:
             return 0
-# now we're able to calculate if we have a long or short signal for each strategy
-# the questions are: How and When we call check_signal methods.
-# "When" depends on you, want to call it everytime we have a live price update ? is it useful to do so ?
-# want to call it once per candle ? there can be many answers, or you could call it only at some specific time of the day
-# e.g. you noticed that the macd of 8 is a good indicator por the rest of the daily trend
+
+    # now we're able to calculate if we have a long or short signal for each strategy
+    # the questions are: How and When we call check_signal methods.
+    # "When" depends on you, want to call it everytime we have a live price update ? is it useful to do so ?
+    # want to call it once per candle ? there can be many answers, or you could call it only at some specific time of the day
+    # e.g. you noticed that the macd of 8 is a good indicator por the rest of the daily trend
 
     def check_trade(self, tick_type: str):
         # we compute the indicators and check for a new trade only when there is a new candle
-        if tick_type == "new_candle" and not self.open_position:
+        if tick_type == "new_candle" and not self.ongoing_position:
             signal_result = self._check_signal()
 
             if signal_result in [-1, 1]:
@@ -214,9 +279,9 @@ class TechnicalStrategy(Strategy):
 
 
 class BreakoutStrategy(Strategy):
-    def __init__(self, client, contract: Contract, exchange: str, timeframe: str, balance_pct: float, take_profit: float,
-                 stop_loss: float, other_params: Dict):
-        super().__init__(client, contract, exchange, timeframe, balance_pct, take_profit, stop_loss)
+    def __init__(self, client, contract: Contract, exchange: str, timeframe: str, balance_pct: float,
+                 take_profit: float, stop_loss: float, other_params: Dict):
+        super().__init__(client, contract, exchange, timeframe, balance_pct, take_profit, stop_loss, "Breakout")
 
         self._min_volume = other_params['min_volume']
 
@@ -232,13 +297,13 @@ class BreakoutStrategy(Strategy):
             return 0
         # logic useful for implementing inside bar or outside bar patterns
 
-# 43 Adding more conditions for entering a Trade or not 00:03
-# we are able to know if we have long or short signal for each strategy,
-# we need to know who and when are we going a check_signal method
+    # 43 Adding more conditions for entering a Trade or not 00:03
+    # we are able to know if we have long or short signal for each strategy,
+    # we need to know who and when are we going a check_signal method
 
     def check_trade(self, tick_type: str):
         # we compute the indicators and check for a new trade only when there is a new candle
-        if not self.open_position:
+        if not self.ongoing_position:
             signal_result = self._check_signal()
 
             if signal_result in [-1, 1]:
@@ -247,5 +312,3 @@ class BreakoutStrategy(Strategy):
     # if check_signal at every trade if the calculations in it are too heavy and there are many trade updates
     # coming through the websocket the updates may start to delay. to fix this we calculate the difference between
     # the current Unix timestamp and the timestamp of the trade when we parse this trade in parse_trades
-
-
